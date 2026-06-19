@@ -83,6 +83,49 @@
             flex-wrap: wrap;
         }
 
+        /* SYNC STATUS */
+        .sync-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 60px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+        .sync-status.synced {
+            color: #4ade80;
+            border-color: rgba(74,222,128,0.3);
+            background: rgba(74,222,128,0.08);
+        }
+        .sync-status.syncing {
+            color: #fbbf24;
+            border-color: rgba(251,191,36,0.3);
+            background: rgba(251,191,36,0.08);
+        }
+        .sync-status.error {
+            color: #f87171;
+            border-color: rgba(248,113,113,0.3);
+            background: rgba(248,113,113,0.08);
+        }
+        .sync-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        .sync-status.syncing .sync-dot {
+            animation: pulse 1s ease infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
         /* BUTTONS */
         .btn {
             display: inline-flex;
@@ -147,7 +190,7 @@
             transition: all 0.2s;
         }
 
-        /* HERO BAR (resumo mensal) */
+        /* HERO */
         .hero {
             background: linear-gradient(135deg, #0a2f6c, #1a4a7a);
             border-radius: 28px;
@@ -195,7 +238,7 @@
             opacity: 0.8;
         }
 
-        /* NAV (month navigation) */
+        /* NAV */
         .calendar-nav {
             display: flex;
             justify-content: space-between;
@@ -345,7 +388,7 @@
             flex-shrink: 0;
         }
 
-        /* STATS ROW */
+        /* STATS */
         .stats-row {
             display: flex;
             gap: 6px;
@@ -364,9 +407,7 @@
             color: #475569;
             white-space: nowrap;
         }
-        .stat-chip strong {
-            color: #0a2f6c;
-        }
+        .stat-chip strong { color: #0a2f6c; }
 
         /* LEGEND */
         .legend-section {
@@ -457,9 +498,7 @@
             border-left: 4px solid #94a3b8;
             transition: all 0.15s;
         }
-        .event-card:hover {
-            background: #eef2ff;
-        }
+        .event-card:hover { background: #eef2ff; }
         .event-card-content { flex: 1; min-width: 0; }
         .event-card-type {
             font-weight: 700;
@@ -488,7 +527,7 @@
             color: #cbd5e1;
         }
 
-        /* FORM CARD */
+        /* FORM */
         .form-card-title {
             font-size: 0.65rem;
             font-weight: 700;
@@ -531,9 +570,7 @@
             border-color: #d32f2f;
             box-shadow: 0 0 0 3px rgba(211,47,47,0.15);
         }
-        .form-group input[type="date"] {
-            font-size: 0.78rem;
-        }
+        .form-group input[type="date"] { font-size: 0.78rem; }
         .form-actions {
             display: flex;
             justify-content: flex-end;
@@ -641,15 +678,12 @@
         @media print {
             body { background: white !important; padding: 0; }
             .main-container {
-                background: white;
-                box-shadow: none;
-                border: none;
-                border-radius: 0;
-                padding: 0;
+                background: white; box-shadow: none;
+                border: none; border-radius: 0; padding: 0;
             }
             .header { background: #0a2f6c; border-radius: 0; }
             .header-actions, .btn-danger, .card:last-child, .page-footer,
-            .toast, .modal-overlay, .filter-bar { display: none !important; }
+            .toast, .modal-overlay, .filter-bar, .sync-status { display: none !important; }
             .app { grid-template-columns: 1fr; }
             .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; border-radius: 16px; }
         }
@@ -679,7 +713,7 @@
 
 <div class="main-container">
 
-    <!-- CABEÇALHO INSTITUCIONAL -->
+    <!-- CABEÇALHO -->
     <div class="header">
         <div class="logo-area">
             <img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo Seduc SP">
@@ -689,7 +723,14 @@
             </div>
         </div>
         <span class="title-badge">SEDUC SP</span>
+
+        <div class="sync-status" id="syncStatus">
+            <span class="sync-dot"></span>
+            <span id="syncText">Offline</span>
+        </div>
+
         <div class="header-actions">
+            <button class="btn" id="btnSync" title="Sincronizar com Firebase">⟳ Sync</button>
             <button class="btn" id="btnExport">↗ Exportar</button>
             <button class="btn" id="btnImport">↙ Importar</button>
             <button class="btn" id="btnPrint">⎙ Imprimir</button>
@@ -702,12 +743,11 @@
         <!-- COLUNA CALENDÁRIO -->
         <div class="calendar-col">
 
-            <!-- HERO RESUMO -->
-            <div class="hero" id="heroBar" style="margin-bottom:20px;">
+            <div class="hero" style="margin-bottom:20px;">
                 <div class="hero-row">
                     <div>
                         <h2 id="heroMonth">Janeiro 2026</h2>
-                        <div class="hero-sub" id="heroSub">Navegue pelo calendário para ver as ações</div>
+                        <div class="hero-sub" id="heroSub">Navegue pelo calendário</div>
                     </div>
                     <div style="display:flex;gap:10px;flex-wrap:wrap;">
                         <div class="hero-stat"><strong id="heroTotal">0</strong><span>ações</span></div>
@@ -716,18 +756,16 @@
                 </div>
             </div>
 
-            <!-- CALENDÁRIO -->
             <div class="card">
                 <div class="calendar-nav">
-                    <button class="nav-btn" id="prevMonth" aria-label="Mês anterior">◀</button>
+                    <button class="nav-btn" id="prevMonth">◀</button>
                     <span class="month-title" id="monthTitle">Janeiro 2026</span>
-                    <button class="nav-btn" id="nextMonth" aria-label="Próximo mês">▶</button>
+                    <button class="nav-btn" id="nextMonth">▶</button>
                 </div>
                 <div class="weekdays-row" id="weekdaysRow"></div>
                 <div class="filter-bar" id="filterBar"></div>
                 <div class="days-grid" id="daysGrid"></div>
                 <div class="stats-row" id="statsRow"></div>
-
                 <div class="legend-section">
                     <div class="legend-title">Legenda de categorias</div>
                     <div id="legendContent"></div>
@@ -737,8 +775,6 @@
 
         <!-- SIDEBAR -->
         <div class="sidebar">
-
-            <!-- PAINEL DE AÇÕES -->
             <div class="card" id="panelCard">
                 <div class="panel-header">
                     <div class="panel-label">📋 Ações do dia</div>
@@ -749,7 +785,6 @@
                 </div>
             </div>
 
-            <!-- FORMULÁRIO -->
             <div class="card">
                 <div class="form-card-title">➕ Adicionar ação</div>
                 <div class="form-group">
@@ -772,11 +807,11 @@
     </div>
 
     <div class="page-footer">
-        Governo do Estado de São Paulo — Secretaria da Educação — Dados armazenados localmente no navegador
+        Governo do Estado de São Paulo — Secretaria da Educação — Sync: Firebase Realtime Database
     </div>
 </div>
 
-<!-- MODAL IMPORTAÇÃO -->
+<!-- MODAL -->
 <div class="modal-overlay" id="importModal">
     <div class="modal-box">
         <h3>Importar dados</h3>
@@ -791,10 +826,34 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- FIREBASE SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <script>
 (function() {
     'use strict';
 
+    /* ================================================
+       FIREBASE INIT
+    ================================================ */
+    const firebaseConfig = {
+        apiKey: "AIzaSyA623RxOE0Jz8EMx8cd8vRcAD8Z3Vc06Ec",
+        authDomain: "urehoot.firebaseapp.com",
+        databaseURL: "https://urehoot-default-rtdb.firebaseio.com",
+        projectId: "urehoot",
+        storageBucket: "urehoot.firebasestorage.app",
+        messagingSenderId: "945876578083",
+        appId: "1:945876578083:web:e2119ce69812ee46ad2696"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const fbRef = db.ref('calendario_pedagogico_2026/events');
+
+    /* ================================================
+       CATEGORIES
+    ================================================ */
     const CATEGORIES = [
         { key:'Férias docentes',                          color:'var(--c-ferias)',     raw:'#2563eb', group:'Ano letivo' },
         { key:'Recesso escolar',                          color:'var(--c-recesso)',    raw:'#6366f1', group:'Ano letivo' },
@@ -827,7 +886,12 @@
     let selectedDateKey = null;
     let events = {};
     let activeFilters = new Set();
+    let firebaseLoaded = false;
+    let isSyncing = false;
 
+    /* ================================================
+       DOM REFS
+    ================================================ */
     const $ = id => document.getElementById(id);
     const $daysGrid = $('daysGrid');
     const $monthTitle = $('monthTitle');
@@ -848,42 +912,132 @@
     const $heroSub = $('heroSub');
     const $heroTotal = $('heroTotal');
     const $heroFeriados = $('heroFeriados');
+    const $syncStatus = $('syncStatus');
+    const $syncText = $('syncText');
 
-    function dk(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
-    function parseKey(k){ const [y,m,d]=k.split('-').map(Number); return {year:y,month:m-1,day:d}; }
-    function getColor(type){ return COLOR_MAP[type]||'#78716c'; }
-    function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
-    function todayKey(){ const t=new Date(); return dk(t.getFullYear(),t.getMonth(),t.getDate()); }
+    /* ================================================
+       HELPERS
+    ================================================ */
+    function dk(y,m,d) { return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+    function parseKey(k) { const [y,m,d]=k.split('-').map(Number); return {year:y,month:m-1,day:d}; }
+    function getColor(type) { return COLOR_MAP[type]||'#78716c'; }
+    function uid() { return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+    function todayKey() { const t=new Date(); return dk(t.getFullYear(),t.getMonth(),t.getDate()); }
 
-    function dateRange(y1,m1,d1,y2,m2,d2){
+    function dateRange(y1,m1,d1,y2,m2,d2) {
         const dates=[], s=new Date(y1,m1,d1), e=new Date(y2,m2,d2);
-        for(let c=new Date(s);c<=e;c.setDate(c.getDate()+1))
+        for(let c=new Date(s); c<=e; c.setDate(c.getDate()+1))
             dates.push(dk(c.getFullYear(),c.getMonth(),c.getDate()));
         return dates;
     }
-    function singleDate(y,m,d){ return [dk(y,m,d)]; }
+    function singleDate(y,m,d) { return [dk(y,m,d)]; }
 
-    function showToast(msg){
-        $toast.textContent=msg;
+    function showToast(msg) {
+        $toast.textContent = msg;
         $toast.classList.add('show');
-        setTimeout(()=>$toast.classList.remove('show'),2400);
+        setTimeout(() => $toast.classList.remove('show'), 2600);
     }
 
-    function loadEvents(){
-        try{ const r=localStorage.getItem(STORAGE_KEY); events=r?JSON.parse(r):{}; }
-        catch(e){ events={}; }
+    /* ================================================
+       SYNC STATUS INDICATOR
+    ================================================ */
+    function setSyncStatus(status, text) {
+        $syncStatus.className = 'sync-status ' + status;
+        $syncText.textContent = text;
     }
-    function saveEvents(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(events)); }
 
-    function addBulkEvent(dates,type,desc){
-        dates.forEach(d=>{
-            if(!events[d]) events[d]=[];
-            if(!events[d].some(e=>e.type===type&&(e.description||'')==(desc||'')))
-                events[d].push({id:uid(),type,description:desc||''});
+    /* ================================================
+       FIREBASE: SAVE TO CLOUD
+       Salva todo o objeto events no Firebase.
+       Usamos .set() para substituir tudo de uma vez.
+    ================================================ */
+    function saveToFirebase() {
+        if(isSyncing) return;
+        isSyncing = true;
+        setSyncStatus('syncing', 'Salvando...');
+
+        // Remove chaves com array vazio antes de salvar
+        const cleanEvents = {};
+        for(const [k, v] of Object.entries(events)) {
+            if(Array.isArray(v) && v.length > 0) {
+                cleanEvents[k] = v;
+            }
+        }
+
+        fbRef.set(cleanEvents)
+            .then(() => {
+                setSyncStatus('synced', 'Sincronizado');
+                isSyncing = false;
+            })
+            .catch(err => {
+                console.error('Firebase save error:', err);
+                setSyncStatus('error', 'Erro ao salvar');
+                isSyncing = false;
+                showToast('Erro ao sincronizar: ' + err.message);
+            });
+    }
+
+    /* ================================================
+       FIREBASE: LISTEN FOR REALTIME CHANGES
+       Escuta mudanças em tempo real do Firebase.
+       Se outro dispositivo alterar, atualiza aqui automaticamente.
+    ================================================ */
+    function listenFirebase() {
+        setSyncStatus('syncing', 'Conectando...');
+
+        fbRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if(data) {
+                events = data;
+                saveLocal(); // mantém localStorage atualizado
+                firebaseLoaded = true;
+                setSyncStatus('synced', 'Sincronizado');
+                renderCalendar();
+                if(selectedDateKey) renderPanel();
+            } else {
+                // Firebase vazio — faz seed se local tem dados
+                if(Object.keys(events).length > 0) {
+                    saveToFirebase();
+                } else {
+                    seedDefaultEvents();
+                    saveToFirebase();
+                }
+                setSyncStatus('synced', 'Sincronizado');
+            }
+        }, (err) => {
+            console.error('Firebase listen error:', err);
+            setSyncStatus('error', 'Sem conexão');
         });
     }
 
-    function seedDefaultEvents(){
+    /* ================================================
+       LOCAL STORAGE
+    ================================================ */
+    function loadLocal() {
+        try {
+            const r = localStorage.getItem(STORAGE_KEY);
+            events = r ? JSON.parse(r) : {};
+        } catch(e) { events = {}; }
+    }
+    function saveLocal() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    }
+
+    /* ================================================
+       BULK EVENT HELPER
+    ================================================ */
+    function addBulkEvent(dates, type, desc) {
+        dates.forEach(d => {
+            if(!events[d]) events[d] = [];
+            if(!events[d].some(e => e.type === type && (e.description||'') === (desc||'')))
+                events[d].push({ id: uid(), type, description: desc||'' });
+        });
+    }
+
+    /* ================================================
+       SEED DEFAULT EVENTS (Calendário Oficial SP)
+    ================================================ */
+    function seedDefaultEvents() {
         // FÉRIAS DOCENTES
         addBulkEvent(dateRange(2026,0,2,2026,0,17),'Férias docentes','');
         addBulkEvent(dateRange(2026,6,6,2026,6,21),'Férias docentes','');
@@ -912,10 +1066,8 @@
         addBulkEvent(dateRange(2026,3,7,2026,3,10),'Mapa Classe - Sondagem','');
         addBulkEvent(dateRange(2026,8,8,2026,8,11),'Mapa Classe - Sondagem','');
 
-        // FLUÊNCIA LEITORA - ENTRADA
+        // FLUÊNCIA LEITORA
         addBulkEvent(dateRange(2026,2,9,2026,2,27),'Avaliação de fluência leitora - Entrada','2º ano EF');
-
-        // FLUÊNCIA LEITORA - SAÍDA
         addBulkEvent(dateRange(2026,10,23,2026,10,27),'Avaliação de fluência leitora - Saída','2º ano EF');
 
         // PROVA PAULISTA
@@ -931,7 +1083,7 @@
         addBulkEvent(singleDate(2026,10,30),'SARESP','');
         addBulkEvent(dateRange(2026,11,1,2026,11,4),'SARESP','');
 
-        // PERÍODO DE RECUPERAÇÃO E APROFUNDAMENTO
+        // RECUPERAÇÃO E APROFUNDAMENTO
         addBulkEvent(dateRange(2026,3,23,2026,3,30),'Período de recuperação e aprofundamento','');
         addBulkEvent(dateRange(2026,6,24,2026,6,31),'Período de recuperação e aprofundamento','');
         addBulkEvent(dateRange(2026,11,1,2026,11,4),'Período de recuperação e aprofundamento','');
@@ -968,281 +1120,340 @@
         addBulkEvent(singleDate(2026,11,24),'Feriado / Emenda','Emenda');
         addBulkEvent(singleDate(2026,11,25),'Feriado / Emenda','Natal');
 
-        saveEvents();
-        localStorage.setItem(SEED_KEY,'1');
+        saveLocal();
     }
 
-    function renderWeekdays(){
-        $weekdaysRow.innerHTML = WEEKDAY_LABELS.map(l=>`<div class="weekday-label">${l}</div>`).join('');
+    /* ================================================
+       RENDER FUNCTIONS
+    ================================================ */
+    function renderWeekdays() {
+        $weekdaysRow.innerHTML = WEEKDAY_LABELS.map(l => `<div class="weekday-label">${l}</div>`).join('');
     }
 
-    function renderLegend(){
-        const groups={};
-        CATEGORIES.forEach(c=>{ if(!groups[c.group])groups[c.group]=[]; groups[c.group].push(c); });
-        let html='';
-        for(const [g,items] of Object.entries(groups)){
-            html+=`<div class="legend-group">
+    function renderLegend() {
+        const groups = {};
+        CATEGORIES.forEach(c => { if(!groups[c.group]) groups[c.group]=[]; groups[c.group].push(c); });
+        let html = '';
+        for(const [g,items] of Object.entries(groups)) {
+            html += `<div class="legend-group">
                 <div class="legend-group-title">${g}</div>
-                <div class="legend-grid">${items.map(c=>`<div class="legend-item"><div class="legend-swatch" style="background:${c.color}"></div>${c.key}</div>`).join('')}</div>
+                <div class="legend-grid">${items.map(c => `<div class="legend-item"><div class="legend-swatch" style="background:${c.color}"></div>${c.key}</div>`).join('')}</div>
             </div>`;
         }
-        $legendContent.innerHTML=html;
+        $legendContent.innerHTML = html;
     }
 
-    function renderFilters(){
-        let html='<div class="filter-chip active" data-filter="all">Todos</div>';
-        CATEGORIES.forEach(c=>{
-            html+=`<div class="filter-chip" data-filter="${c.key}"><span class="fdot" style="background:${c.raw}"></span>${c.key}</div>`;
+    function renderFilters() {
+        let html = '<div class="filter-chip active" data-filter="all">Todos</div>';
+        CATEGORIES.forEach(c => {
+            html += `<div class="filter-chip" data-filter="${c.key}"><span class="fdot" style="background:${c.raw}"></span>${c.key}</div>`;
         });
-        $filterBar.innerHTML=html;
-        $filterBar.querySelectorAll('.filter-chip').forEach(chip=>{
-            chip.addEventListener('click',()=>{
-                const f=chip.dataset.filter;
-                if(f==='all'){
+        $filterBar.innerHTML = html;
+        $filterBar.querySelectorAll('.filter-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const f = chip.dataset.filter;
+                if(f === 'all') {
                     activeFilters.clear();
-                    $filterBar.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+                    $filterBar.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
                     chip.classList.add('active');
                 } else {
                     $filterBar.querySelector('[data-filter="all"]').classList.remove('active');
                     chip.classList.toggle('active');
                     if(chip.classList.contains('active')) activeFilters.add(f);
                     else activeFilters.delete(f);
-                    if(activeFilters.size===0) $filterBar.querySelector('[data-filter="all"]').classList.add('active');
+                    if(activeFilters.size === 0) $filterBar.querySelector('[data-filter="all"]').classList.add('active');
                 }
                 renderCalendar();
             });
         });
     }
 
-    function getVisibleEvents(dateK){
-        const dayEv=events[dateK];
+    function getVisibleEvents(dateK) {
+        const dayEv = events[dateK];
         if(!dayEv) return [];
-        if(activeFilters.size===0) return dayEv;
-        return dayEv.filter(e=>activeFilters.has(e.type));
+        if(activeFilters.size === 0) return dayEv;
+        return dayEv.filter(e => activeFilters.has(e.type));
     }
 
-    function updateHero(){
-        $heroMonth.textContent=`${MONTH_NAMES[currentMonth]} ${currentYear}`;
-        let total=0, feriados=0;
-        for(const [dateK,arr] of Object.entries(events)){
-            const {year,month}=parseKey(dateK);
-            if(year===currentYear&&month===currentMonth){
-                const filtered=activeFilters.size===0?arr:arr.filter(e=>activeFilters.has(e.type));
-                total+=filtered.length;
-                feriados+=filtered.filter(e=>e.type==='Feriado / Emenda').length;
+    function updateHero() {
+        $heroMonth.textContent = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
+        let total = 0, feriados = 0;
+        for(const [dateK, arr] of Object.entries(events)) {
+            const {year, month} = parseKey(dateK);
+            if(year === currentYear && month === currentMonth) {
+                const filtered = activeFilters.size === 0 ? arr : arr.filter(e => activeFilters.has(e.type));
+                total += filtered.length;
+                feriados += filtered.filter(e => e.type === 'Feriado / Emenda').length;
             }
         }
-        $heroTotal.textContent=total;
-        $heroFeriados.textContent=feriados;
-        $heroSub.textContent=total>0?`${total} ação${total>1?'ões':''} programada${total>1?'s':''} neste mês`:'Nenhuma ação programada neste mês';
+        $heroTotal.textContent = total;
+        $heroFeriados.textContent = feriados;
+        $heroSub.textContent = total > 0 ? `${total} ação${total>1?'ões':''} programada${total>1?'s':''} neste mês` : 'Nenhuma ação programada neste mês';
     }
 
-    function renderCalendar(){
-        $monthTitle.textContent=`${MONTH_NAMES[currentMonth]} ${currentYear}`;
-        const firstDay=new Date(currentYear,currentMonth,1).getDay();
-        const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
-        const tk=todayKey();
+    function renderCalendar() {
+        $monthTitle.textContent = `${MONTH_NAMES[currentMonth]} ${currentYear}`;
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth+1, 0).getDate();
+        const tk = todayKey();
 
-        let html='';
-        for(let i=0;i<firstDay;i++) html+='<div class="day-cell empty"></div>';
+        let html = '';
+        for(let i = 0; i < firstDay; i++) html += '<div class="day-cell empty"></div>';
 
-        for(let d=1;d<=daysInMonth;d++){
-            const dateK=dk(currentYear,currentMonth,d);
-            const visible=getVisibleEvents(dateK);
-            const isSelected=dateK===selectedDateKey;
-            const isToday=dateK===tk;
+        for(let d = 1; d <= daysInMonth; d++) {
+            const dateK = dk(currentYear, currentMonth, d);
+            const visible = getVisibleEvents(dateK);
+            const isSelected = dateK === selectedDateKey;
+            const isToday = dateK === tk;
 
-            let cls='day-cell has-day';
-            if(isSelected) cls+=' selected';
-            if(isToday) cls+=' today';
+            let cls = 'day-cell has-day';
+            if(isSelected) cls += ' selected';
+            if(isToday) cls += ' today';
 
-            let dots='';
-            if(visible.length>0){
-                dots='<div class="event-dots">'+
-                    visible.slice(0,6).map(e=>`<div class="event-dot" style="background:${getColor(e.type)}"></div>`).join('')+
-                    (visible.length>6?'<div class="event-dot" style="background:#555"></div>':'')+
+            let dots = '';
+            if(visible.length > 0) {
+                dots = '<div class="event-dots">' +
+                    visible.slice(0,6).map(e => `<div class="event-dot" style="background:${getColor(e.type)}"></div>`).join('') +
+                    (visible.length > 6 ? '<div class="event-dot" style="background:#555"></div>' : '') +
                     '</div>';
             }
 
-            html+=`<div class="${cls}" data-date="${dateK}"><div class="day-number">${d}</div>${dots}</div>`;
+            html += `<div class="${cls}" data-date="${dateK}"><div class="day-number">${d}</div>${dots}</div>`;
         }
-        $daysGrid.innerHTML=html;
-        $daysGrid.querySelectorAll('.day-cell.has-day').forEach(cell=>{
-            cell.addEventListener('click',()=>selectDay(cell.dataset.date));
+        $daysGrid.innerHTML = html;
+        $daysGrid.querySelectorAll('.day-cell.has-day').forEach(cell => {
+            cell.addEventListener('click', () => selectDay(cell.dataset.date));
         });
         renderStats();
         updateHero();
     }
 
-    function renderStats(){
-        const monthEv={};
-        let total=0;
-        for(const [dateK,arr] of Object.entries(events)){
-            const {year,month}=parseKey(dateK);
-            if(year===currentYear&&month===currentMonth){
-                const filtered=activeFilters.size===0?arr:arr.filter(e=>activeFilters.has(e.type));
-                filtered.forEach(e=>{ monthEv[e.type]=(monthEv[e.type]||0)+1; total++; });
+    function renderStats() {
+        const monthEv = {};
+        let total = 0;
+        for(const [dateK, arr] of Object.entries(events)) {
+            const {year, month} = parseKey(dateK);
+            if(year === currentYear && month === currentMonth) {
+                const filtered = activeFilters.size === 0 ? arr : arr.filter(e => activeFilters.has(e.type));
+                filtered.forEach(e => { monthEv[e.type] = (monthEv[e.type]||0) + 1; total++; });
             }
         }
-        if(total===0){ $statsRow.innerHTML=''; return; }
-        let html=`<div class="stat-chip"><strong>${total}</strong> ação${total>1?'ões':''} este mês</div>`;
-        for(const [type,cnt] of Object.entries(monthEv)){
-            const short=type.length>24?type.slice(0,24)+'…':type;
-            html+=`<div class="stat-chip"><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:${getColor(type)};margin-right:4px;vertical-align:middle;"></span>${cnt}× ${short}</div>`;
+        if(total === 0) { $statsRow.innerHTML = ''; return; }
+        let html = `<div class="stat-chip"><strong>${total}</strong> ação${total>1?'ões':''} este mês</div>`;
+        for(const [type, cnt] of Object.entries(monthEv)) {
+            const short = type.length > 24 ? type.slice(0,24)+'…' : type;
+            html += `<div class="stat-chip"><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:${getColor(type)};margin-right:4px;vertical-align:middle;"></span>${cnt}× ${short}</div>`;
         }
-        $statsRow.innerHTML=html;
+        $statsRow.innerHTML = html;
     }
 
-    function selectDay(dateK){
-        selectedDateKey=dateK;
+    function selectDay(dateK) {
+        selectedDateKey = dateK;
         renderCalendar();
         renderPanel();
     }
 
-    function renderPanel(){
-        if(!selectedDateKey){
-            $panelDate.textContent='Selecione um dia';
-            $eventList.innerHTML='<div class="empty-state">Clique em um dia no calendário<small>para ver e gerenciar ações</small></div>';
+    function renderPanel() {
+        if(!selectedDateKey) {
+            $panelDate.textContent = 'Selecione um dia';
+            $eventList.innerHTML = '<div class="empty-state">Clique em um dia no calendário<small>para ver e gerenciar ações</small></div>';
             return;
         }
-        const {year,month,day}=parseKey(selectedDateKey);
-        const dateObj=new Date(year,month,day);
-        $panelDate.textContent=dateObj.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+        const {year, month, day} = parseKey(selectedDateKey);
+        const dateObj = new Date(year, month, day);
+        $panelDate.textContent = dateObj.toLocaleDateString('pt-BR', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-        const dayEv=events[selectedDateKey];
-        if(!dayEv||dayEv.length===0){
-            $eventList.innerHTML='<div class="empty-state">Nenhuma ação neste dia<small>Use o formulário abaixo para adicionar</small></div>';
+        const dayEv = events[selectedDateKey];
+        if(!dayEv || dayEv.length === 0) {
+            $eventList.innerHTML = '<div class="empty-state">Nenhuma ação neste dia<small>Use o formulário abaixo para adicionar</small></div>';
             return;
         }
 
-        $eventList.innerHTML=dayEv.map(ev=>{
-            const c=getColor(ev.type);
+        $eventList.innerHTML = dayEv.map(ev => {
+            const c = getColor(ev.type);
             return `<div class="event-card fade-in" style="border-left-color:${c}">
                 <div class="event-card-content">
                     <div class="event-card-type">${ev.type}</div>
-                    ${ev.description?`<div class="event-card-desc">${ev.description}</div>`:''}
+                    ${ev.description ? `<div class="event-card-desc">${ev.description}</div>` : ''}
                 </div>
                 <button class="btn btn-danger btn-sm" data-eid="${ev.id}" title="Remover">✕</button>
             </div>`;
         }).join('');
 
-        $eventList.querySelectorAll('.btn-danger').forEach(btn=>{
-            btn.addEventListener('click',e=>{
+        $eventList.querySelectorAll('.btn-danger').forEach(btn => {
+            btn.addEventListener('click', e => {
                 e.stopPropagation();
-                removeEvent(selectedDateKey,btn.dataset.eid);
+                removeEvent(selectedDateKey, btn.dataset.eid);
             });
         });
     }
 
-    function addEvent(){
-        const dateVal=$addDate.value;
-        if(!dateVal){ showToast('Selecione uma data'); return; }
-        const type=$addType.value;
-        if(!type){ showToast('Selecione uma categoria'); return; }
-        const desc=$addDesc.value.trim();
-        let finalType=type, finalDesc=desc;
-        if(type==='Outro'){
-            if(!desc){ showToast('Para "Outro", descreva na descrição'); return; }
-            finalType=desc; finalDesc='';
+    /* ================================================
+       ADD EVENT → LOCAL + FIREBASE
+    ================================================ */
+    function addEvent() {
+        const dateVal = $addDate.value;
+        if(!dateVal) { showToast('Selecione uma data'); return; }
+        const type = $addType.value;
+        if(!type) { showToast('Selecione uma categoria'); return; }
+        const desc = $addDesc.value.trim();
+
+        let finalType = type, finalDesc = desc;
+        if(type === 'Outro') {
+            if(!desc) { showToast('Para "Outro", descreva na descrição'); return; }
+            finalType = desc; finalDesc = '';
         }
-        if(!events[dateVal]) events[dateVal]=[];
-        events[dateVal].push({id:uid(),type:finalType,description:finalDesc});
-        saveEvents();
+
+        if(!events[dateVal]) events[dateVal] = [];
+        events[dateVal].push({ id: uid(), type: finalType, description: finalDesc });
+
+        saveLocal();
+        saveToFirebase();
+
         renderCalendar();
-        selectedDateKey=dateVal;
+        selectedDateKey = dateVal;
         renderPanel();
-        $addType.value=''; $addDesc.value=''; $addDate.value=dateVal;
-        showToast('Ação adicionada com sucesso');
+        $addType.value = '';
+        $addDesc.value = '';
+        $addDate.value = dateVal;
+        showToast('Ação adicionada e sincronizada');
     }
 
-    function removeEvent(dateK,eid){
+    /* ================================================
+       REMOVE EVENT → LOCAL + FIREBASE
+    ================================================ */
+    function removeEvent(dateK, eid) {
         if(!events[dateK]) return;
-        events[dateK]=events[dateK].filter(e=>e.id!==eid);
-        if(events[dateK].length===0) delete events[dateK];
-        saveEvents();
+        events[dateK] = events[dateK].filter(e => e.id !== eid);
+        if(events[dateK].length === 0) delete events[dateK];
+
+        saveLocal();
+        saveToFirebase();
+
         renderCalendar();
         renderPanel();
-        showToast('Ação removida');
+        showToast('Ação removida e sincronizada');
     }
 
-    function exportData(){
-        const json=JSON.stringify(events,null,2);
-        const blob=new Blob([json],{type:'application/json'});
-        const url=URL.createObjectURL(blob);
-        const a=document.createElement('a');
-        a.href=url; a.download='calendario-pedagogico-2026.json'; a.click();
+    /* ================================================
+       EXPORT / IMPORT
+    ================================================ */
+    function exportData() {
+        const json = JSON.stringify(events, null, 2);
+        const blob = new Blob([json], {type:'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'calendario-pedagogico-2026.json'; a.click();
         URL.revokeObjectURL(url);
         showToast('Dados exportados');
     }
 
-    function openImport(){ $importText.value=''; $importModal.classList.add('active'); }
-    function closeImport(){ $importModal.classList.remove('active'); }
-    function confirmImport(){
-        try{
-            const data=JSON.parse($importText.value);
-            if(typeof data!=='object'||Array.isArray(data)) throw new Error();
-            events=data; saveEvents(); renderCalendar(); renderPanel();
-            closeImport(); showToast('Dados importados');
-        } catch(e){ showToast('JSON inválido'); }
+    function openImport() { $importText.value = ''; $importModal.classList.add('active'); }
+    function closeImport() { $importModal.classList.remove('active'); }
+
+    function confirmImport() {
+        try {
+            const data = JSON.parse($importText.value);
+            if(typeof data !== 'object' || Array.isArray(data)) throw new Error();
+            events = data;
+            saveLocal();
+            saveToFirebase();
+            renderCalendar();
+            renderPanel();
+            closeImport();
+            showToast('Dados importados e sincronizados');
+        } catch(e) {
+            showToast('JSON inválido');
+        }
     }
 
-    function populateTypeSelect(){
-        let html='<option value="">— Selecione —</option>';
-        CATEGORIES.forEach(c=>{ html+=`<option value="${c.key}">${c.key}</option>`; });
-        $addType.innerHTML=html;
+    function populateTypeSelect() {
+        let html = '<option value="">— Selecione —</option>';
+        CATEGORIES.forEach(c => { html += `<option value="${c.key}">${c.key}</option>`; });
+        $addType.innerHTML = html;
     }
 
-    function init(){
-        loadEvents();
-        if(!localStorage.getItem(SEED_KEY)) seedDefaultEvents();
+    /* ================================================
+       INIT
+    ================================================ */
+    function init() {
+        // 1. Load local first (fast)
+        loadLocal();
 
+        // 2. Seed if empty
+        if(!localStorage.getItem(SEED_KEY) && Object.keys(events).length === 0) {
+            seedDefaultEvents();
+            localStorage.setItem(SEED_KEY, '1');
+        }
+
+        // 3. Render with local data
         renderWeekdays();
         renderLegend();
         renderFilters();
         populateTypeSelect();
 
-        const t=new Date();
-        $addDate.value=dk(t.getFullYear(),t.getMonth(),t.getDate());
+        const t = new Date();
+        $addDate.value = dk(t.getFullYear(), t.getMonth(), t.getDate());
 
-        const tk=todayKey();
-        const pk=parseKey(tk);
-        if(pk.year===2026){
-            currentMonth=pk.month;
+        const tk = todayKey();
+        const pk = parseKey(tk);
+        if(pk.year === 2026) {
+            currentMonth = pk.month;
             renderCalendar();
             selectDay(tk);
         } else {
-            currentMonth=0;
+            currentMonth = 0;
             renderCalendar();
-            selectDay(dk(2026,0,2));
+            selectDay(dk(2026, 0, 2));
         }
 
-        $('prevMonth').addEventListener('click',()=>{
+        // 4. Connect Firebase (realtime listener replaces local if cloud has data)
+        listenFirebase();
+
+        // 5. If first seed and Firebase was empty, push to cloud
+        setTimeout(() => {
+            if(!firebaseLoaded && Object.keys(events).length > 0) {
+                saveToFirebase();
+            }
+        }, 2000);
+
+        // Bindings
+        $('prevMonth').addEventListener('click', () => {
             currentMonth--;
-            if(currentMonth<0){currentMonth=11;currentYear--;}
-            selectedDateKey=null;
+            if(currentMonth < 0) { currentMonth = 11; currentYear--; }
+            selectedDateKey = null;
             renderCalendar(); renderPanel();
         });
-        $('nextMonth').addEventListener('click',()=>{
+        $('nextMonth').addEventListener('click', () => {
             currentMonth++;
-            if(currentMonth>11){currentMonth=0;currentYear++;}
-            selectedDateKey=null;
+            if(currentMonth > 11) { currentMonth = 0; currentYear++; }
+            selectedDateKey = null;
             renderCalendar(); renderPanel();
         });
-        $addBtn.addEventListener('click',addEvent);
-        $('btnExport').addEventListener('click',exportData);
-        $('btnImport').addEventListener('click',openImport);
-        $('importCancel').addEventListener('click',closeImport);
-        $('importConfirm').addEventListener('click',confirmImport);
-        $('btnPrint').addEventListener('click',()=>window.print());
-        $('btnReset').addEventListener('click',()=>{
-            if(confirm('Restaurar calendário oficial? Todos os dados atuais serão substituídos.')){
-                events={}; localStorage.removeItem(SEED_KEY);
-                seedDefaultEvents(); renderCalendar(); renderPanel();
-                showToast('Calendário restaurado');
+        $addBtn.addEventListener('click', addEvent);
+        $('btnExport').addEventListener('click', exportData);
+        $('btnImport').addEventListener('click', openImport);
+        $('importCancel').addEventListener('click', closeImport);
+        $('importConfirm').addEventListener('click', confirmImport);
+        $('btnPrint').addEventListener('click', () => window.print());
+        $('btnSync').addEventListener('click', () => {
+            saveToFirebase();
+            showToast('Sincronizando com Firebase...');
+        });
+        $('btnReset').addEventListener('click', () => {
+            if(confirm('Restaurar calendário oficial? Todos os dados serão substituídos.')) {
+                events = {};
+                localStorage.removeItem(SEED_KEY);
+                seedDefaultEvents();
+                localStorage.setItem(SEED_KEY, '1');
+                saveToFirebase();
+                renderCalendar();
+                renderPanel();
+                showToast('Calendário restaurado e sincronizado');
             }
         });
-        $importModal.addEventListener('click',e=>{ if(e.target===$importModal) closeImport(); });
-        document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeImport(); });
+        $importModal.addEventListener('click', e => { if(e.target === $importModal) closeImport(); });
+        document.addEventListener('keydown', e => { if(e.key === 'Escape') closeImport(); });
     }
 
     init();
