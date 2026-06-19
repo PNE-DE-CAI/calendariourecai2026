@@ -1283,7 +1283,7 @@
                     }
                 }
                 if (total === 0) { $statsRow.innerHTML = ''; return; }
-                let html = `<div class="stat-chip"><strong>${total}</strong> ação${total>1?'ões':''} este mês</div>`;
+                let html = `<div class="stat-chip"><strong>${total}</strong> ${total>1?'':''} este mês</div>`;
                 for (const [type, cnt] of Object.entries(monthEv)) {
                     const short = type.length > 24 ? type.slice(0, 24) + '…' : type;
                     html +=
