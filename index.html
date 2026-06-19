@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calendário Pedagógico 2026 — Seduc SP</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ========== IDENTIDADE VISUAL ========== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #0a2f6c 0%, #041a3a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #1e293b;
+        }
+
+        .main-container {
+            max-width: 1440px;
+            margin: 0 auto;
+            background: #0f1a24;
+            border-radius: 48px;
+            padding: 20px;
+            box-shadow: 0 30px 35px rgba(0,0,0,0.5), inset 0 1px 4px rgba(255,255,200,0.1);
+            border: 1px solid #d32f2f;
+        }
+
+        /* CABEÇALHO INSTITUCIONAL */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 47, 108, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 12px 24px;
+            border-radius: 60px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .logo-area img {
+            height: 55px;
+            width: auto;
+            border-radius: 12px;
+            background: white;
+            padding: 4px;
+            object-fit: contain;
+        }
+        .logo-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffec9e;
+            line-height: 1.3;
+        }
+        .logo-text small {
+            display: block;
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: rgba(255,236,158,0.6);
+        }
+        .title-badge {
+            background: #d32f2f;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 3rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 8px 20px;
+            border-radius: 60px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: #c8d6e5;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: #ffec9e;
+            color: #ffec9e;
+        }
+        .btn-primary {
+            background: #0a2f6c;
+            color: white;
+            border-color: #0a2f6c;
+        }
+        .btn-primary:hover {
+            background: #d32f2f;
+            border-color: #d32f2f;
+            color: white;
+        }
+        .btn-danger {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-color: #fecaca;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+        }
+        .btn-danger:hover {
+            background: #fecaca;
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.72rem;
+        }
+
+        /* APP LAYOUT */
+        .app {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 20px;
+            padding: 0 8px 8px;
+        }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            border: 1px solid #e0e4e9;
+            transition: all 0.2s;
+        }
+
+        /* HERO BAR (resumo mensal) */
+        .hero {
+            background: linear-gradient(135deg, #0a2f6c, #1a4a7a);
+            border-radius: 28px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .hero-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .hero h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #ffec9e;
+            line-height: 1.2;
+        }
+        .hero .hero-sub {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            font-weight: 400;
+            color: #ffec9e;
+        }
+        .hero-stat {
+            text-align: center;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 60px;
+        }
+        .hero-stat strong {
+            font-size: 1.4rem;
+            display: block;
+            color: #4ade80;
+        }
+        .hero-stat span {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.8;
+        }
+
+        /* NAV (month navigation) */
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .nav-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 1.5px solid #e2e8f0;
+            background: #f8fafc;
+            color: #0a2f6c;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-btn:hover {
+            background: #0a2f6c;
+            color: white;
+            border-color: #0a2f6c;
+            transform: scale(1.05);
+        }
+        .month-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: #0a2f6c;
+        }
+
+        /* WEEKDAYS */
+        .weekdays-row {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: 6px;
+        }
+        .weekday-label {
+            text-align: center;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #d32f2f;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 6px 0;
+        }
+
+        /* FILTER BAR */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 14px;
+        }
+        .filter-chip {
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 60px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .filter-chip:hover {
+            border-color: #0a2f6c;
+            color: #0a2f6c;
+        }
+        .filter-chip.active {
+            background: #0a2f6c;
+            color: white;
+            border-color: #0a2f6c;
+        }
+        .filter-chip .fdot {
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            margin-right: 3px;
+            vertical-align: middle;
+        }
+
+        /* DAYS GRID */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+        .day-cell {
+            aspect-ratio: 1 / 1;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            position: relative;
+            border: 2px solid transparent;
+            background: #f8fafc;
+            min-height: 52px;
+        }
+        .day-cell.has-day:hover {
+            background: #e0e7ff;
+            transform: translateY(-1px);
+        }
+        .day-cell.selected {
+            border-color: #d32f2f;
+            background: #fee2e2;
+        }
+        .day-cell.today {
+            box-shadow: inset 0 0 0 2px #0a2f6c;
+        }
+        .day-cell.empty {
+            background: transparent;
+            cursor: default;
+        }
+        .day-number {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #1e293b;
+            line-height: 1;
+        }
+        .day-cell.today .day-number {
+            color: #0a2f6c;
+            font-weight: 800;
+        }
+        .day-cell.selected .day-number {
+            color: #d32f2f;
+        }
+        .event-dots {
+            display: flex;
+            gap: 2px;
+            margin-top: 3px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 36px;
+        }
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* STATS ROW */
+        .stats-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .stat-chip {
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 60px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            color: #475569;
+            white-space: nowrap;
+        }
+        .stat-chip strong {
+            color: #0a2f6c;
+        }
+
+        /* LEGEND */
+        .legend-section {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .legend-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #d32f2f;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .legend-group { margin-bottom: 10px; }
+        .legend-group-title {
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .legend-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px 10px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.68rem;
+            color: #475569;
+            font-weight: 500;
+        }
+        .legend-swatch {
+            width: 10px;
+            height: 10px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* PANEL */
+        .panel-header { margin-bottom: 14px; }
+        .panel-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #d32f2f;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .panel-date {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #0a2f6c;
+        }
+
+        .event-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-height: 280px;
+            overflow-y: auto;
+            margin-bottom: 4px;
+            scrollbar-width: thin;
+            scrollbar-color: #e2e8f0 transparent;
+        }
+        .event-list::-webkit-scrollbar { width: 4px; }
+        .event-list::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+
+        .event-card {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            padding: 10px 12px;
+            border-radius: 16px;
+            background: #f8fafc;
+            border-left: 4px solid #94a3b8;
+            transition: all 0.15s;
+        }
+        .event-card:hover {
+            background: #eef2ff;
+        }
+        .event-card-content { flex: 1; min-width: 0; }
+        .event-card-type {
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: #1e293b;
+            line-height: 1.3;
+        }
+        .event-card-desc {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 28px 16px;
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 0.85rem;
+        }
+        .empty-state small {
+            display: block;
+            font-style: normal;
+            font-size: 0.7rem;
+            margin-top: 4px;
+            color: #cbd5e1;
+        }
+
+        /* FORM CARD */
+        .form-card-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #d32f2f;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+        .form-group { margin-bottom: 10px; }
+        .form-group label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #1e4663;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            padding: 9px 14px;
+            border-radius: 60px;
+            border: 1px solid #cbd5e1;
+            background: white;
+            color: #1e293b;
+            transition: 0.2s;
+        }
+        .form-group select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M3 4.5l3 3 3-3'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 32px;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 3px rgba(211,47,47,0.15);
+        }
+        .form-group input[type="date"] {
+            font-size: 0.78rem;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        /* FOOTER */
+        .page-footer {
+            text-align: center;
+            font-size: 0.68rem;
+            color: rgba(255,236,158,0.35);
+            margin-top: 20px;
+            padding: 0 8px;
+            font-weight: 400;
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(4,26,58,0.7);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: white;
+            border-radius: 28px;
+            padding: 32px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .modal-box h3 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0a2f6c;
+            margin-bottom: 14px;
+        }
+        .modal-box p {
+            font-size: 0.82rem;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+        .modal-box textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            color: #1e293b;
+            background: #f8fafc;
+            resize: vertical;
+        }
+        .modal-box textarea:focus {
+            outline: none;
+            border-color: #d32f2f;
+            box-shadow: 0 0 0 3px rgba(211,47,47,0.15);
+        }
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, #0a2f6c, #052050);
+            color: #ffec9e;
+            font-weight: 600;
+            font-size: 0.8rem;
+            padding: 12px 22px;
+            border-radius: 60px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+            z-index: 2000;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,236,158,0.2);
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        .fade-in { animation: fadeIn 0.25s ease forwards; }
+
+        /* PRINT */
+        @media print {
+            body { background: white !important; padding: 0; }
+            .main-container {
+                background: white;
+                box-shadow: none;
+                border: none;
+                border-radius: 0;
+                padding: 0;
+            }
+            .header { background: #0a2f6c; border-radius: 0; }
+            .header-actions, .btn-danger, .card:last-child, .page-footer,
+            .toast, .modal-overlay, .filter-bar { display: none !important; }
+            .app { grid-template-columns: 1fr; }
+            .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; border-radius: 16px; }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 960px) {
+            .app { grid-template-columns: 1fr; }
+            .main-container { border-radius: 28px; padding: 14px; }
+            .header { border-radius: 32px; }
+        }
+        @media (max-width: 500px) {
+            body { padding: 10px; }
+            .main-container { border-radius: 20px; padding: 10px; }
+            .header { border-radius: 24px; padding: 10px 16px; }
+            .logo-area img { height: 40px; }
+            .card { border-radius: 20px; padding: 1rem; }
+            .hero { border-radius: 20px; padding: 1rem; }
+            .hero h2 { font-size: 1.1rem; }
+            .day-cell { min-height: 40px; border-radius: 8px; }
+            .day-number { font-size: 0.72rem; }
+            .event-dot { width: 5px; height: 5px; }
+            .month-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+
+    <!-- CABEÇALHO INSTITUCIONAL -->
+    <div class="header">
+        <div class="logo-area">
+            <img src="https://i.ibb.co/0p01LzxB/logo3de.jpg" alt="Logo Seduc SP">
+            <div class="logo-text">
+                Calendário Pedagógico 2026
+                <small>Secretaria da Educação — São Paulo</small>
+            </div>
+        </div>
+        <span class="title-badge">SEDUC SP</span>
+        <div class="header-actions">
+            <button class="btn" id="btnExport">↗ Exportar</button>
+            <button class="btn" id="btnImport">↙ Importar</button>
+            <button class="btn" id="btnPrint">⎙ Imprimir</button>
+            <button class="btn" id="btnReset">↺ Restaurar</button>
+        </div>
+    </div>
+
+    <div class="app">
+
+        <!-- COLUNA CALENDÁRIO -->
+        <div class="calendar-col">
+
+            <!-- HERO RESUMO -->
+            <div class="hero" id="heroBar" style="margin-bottom:20px;">
+                <div class="hero-row">
+                    <div>
+                        <h2 id="heroMonth">Janeiro 2026</h2>
+                        <div class="hero-sub" id="heroSub">Navegue pelo calendário para ver as ações</div>
+                    </div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <div class="hero-stat"><strong id="heroTotal">0</strong><span>ações</span></div>
+                        <div class="hero-stat"><strong id="heroFeriados">0</strong><span>feriados</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CALENDÁRIO -->
+            <div class="card">
+                <div class="calendar-nav">
+                    <button class="nav-btn" id="prevMonth" aria-label="Mês anterior">◀</button>
+                    <span class="month-title" id="monthTitle">Janeiro 2026</span>
+                    <button class="nav-btn" id="nextMonth" aria-label="Próximo mês">▶</button>
+                </div>
+                <div class="weekdays-row" id="weekdaysRow"></div>
+                <div class="filter-bar" id="filterBar"></div>
+                <div class="days-grid" id="daysGrid"></div>
+                <div class="stats-row" id="statsRow"></div>
+
+                <div class="legend-section">
+                    <div class="legend-title">Legenda de categorias</div>
+                    <div id="legendContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+
+            <!-- PAINEL DE AÇÕES -->
+            <div class="card" id="panelCard">
+                <div class="panel-header">
+                    <div class="panel-label">📋 Ações do dia</div>
+                    <div class="panel-date" id="panelDate">Selecione um dia</div>
+                </div>
+                <div class="event-list" id="eventList">
+                    <div class="empty-state">Clique em um dia no calendário<small>para ver e gerenciar ações</small></div>
+                </div>
+            </div>
+
+            <!-- FORMULÁRIO -->
+            <div class="card">
+                <div class="form-card-title">➕ Adicionar ação</div>
+                <div class="form-group">
+                    <label for="addDate">Data</label>
+                    <input type="date" id="addDate" />
+                </div>
+                <div class="form-group">
+                    <label for="addType">Categoria</label>
+                    <select id="addType"></select>
+                </div>
+                <div class="form-group">
+                    <label for="addDesc">Descrição (opcional)</label>
+                    <input type="text" id="addDesc" placeholder="Detalhes adicionais..." />
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="addEventBtn">+ Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-footer">
+        Governo do Estado de São Paulo — Secretaria da Educação — Dados armazenados localmente no navegador
+    </div>
+</div>
+
+<!-- MODAL IMPORTAÇÃO -->
+<div class="modal-overlay" id="importModal">
+    <div class="modal-box">
+        <h3>Importar dados</h3>
+        <p>Cole o JSON exportado abaixo. Isso substituirá todos os eventos atuais.</p>
+        <textarea id="importTextarea" placeholder='Cole o JSON aqui...'></textarea>
+        <div class="modal-actions">
+            <button class="btn" id="importCancel">Cancelar</button>
+            <button class="btn btn-primary" id="importConfirm">Importar</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+    'use strict';
+
+    const CATEGORIES = [
+        { key:'Férias docentes',                          color:'var(--c-ferias)',     raw:'#2563eb', group:'Ano letivo' },
+        { key:'Recesso escolar',                          color:'var(--c-recesso)',    raw:'#6366f1', group:'Ano letivo' },
+        { key:'Planejamento',                             color:'var(--c-planejamento)',raw:'#ca8a04', group:'Ano letivo' },
+        { key:'Início do bimestre',                       color:'var(--c-bimestre)',   raw:'#7c3aed', group:'Ano letivo' },
+        { key:'Feriado / Emenda',                         color:'var(--c-feriado)',    raw:'#ea580c', group:'Feriados' },
+        { key:'Atividades diagnósticas',                  color:'var(--c-diagnostica)',raw:'#0d9488', group:'Avaliações' },
+        { key:'Prova Paulista',                           color:'var(--c-paulista)',   raw:'#dc2626', group:'Avaliações' },
+        { key:'Período de recuperação e aprofundamento',  color:'var(--c-recuperacao)',raw:'#d97706', group:'Avaliações' },
+        { key:'Prova de recuperação',                     color:'var(--c-prova-rec)',  raw:'#b91c1c', group:'Avaliações' },
+        { key:'SARESP',                                   color:'var(--c-saresp)',     raw:'#6d28d9', group:'Avaliações' },
+        { key:'Avaliação de fluência leitora - Entrada',  color:'var(--c-entrada)',    raw:'#059669', group:'Avaliações' },
+        { key:'Avaliação de fluência leitora - Saída',    color:'var(--c-saida)',      raw:'#0891b2', group:'Avaliações' },
+        { key:'Mapa Classe - Sondagem',                   color:'var(--c-sondagem)',   raw:'#c2410c', group:'Avaliações' },
+        { key:'OMASP',                                    color:'var(--c-omasp)',      raw:'#1e293b', group:'Olimpíadas' },
+        { key:'OLISP',                                    color:'var(--c-olisp)',      raw:'#991b1b', group:'Olimpíadas' },
+        { key:'Outro',                                    color:'var(--c-outro)',      raw:'#78716c', group:'Outros' }
+    ];
+
+    const COLOR_MAP = {};
+    CATEGORIES.forEach(c => COLOR_MAP[c.key] = c.raw);
+
+    const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    const WEEKDAY_LABELS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const STORAGE_KEY = 'ped_events_2026_v3';
+    const SEED_KEY = 'ped_events_2026_v3_seeded';
+
+    let currentMonth = 0;
+    let currentYear = 2026;
+    let selectedDateKey = null;
+    let events = {};
+    let activeFilters = new Set();
+
+    const $ = id => document.getElementById(id);
+    const $daysGrid = $('daysGrid');
+    const $monthTitle = $('monthTitle');
+    const $weekdaysRow = $('weekdaysRow');
+    const $panelDate = $('panelDate');
+    const $eventList = $('eventList');
+    const $statsRow = $('statsRow');
+    const $legendContent = $('legendContent');
+    const $filterBar = $('filterBar');
+    const $addDate = $('addDate');
+    const $addType = $('addType');
+    const $addDesc = $('addDesc');
+    const $addBtn = $('addEventBtn');
+    const $toast = $('toast');
+    const $importModal = $('importModal');
+    const $importText = $('importTextarea');
+    const $heroMonth = $('heroMonth');
+    const $heroSub = $('heroSub');
+    const $heroTotal = $('heroTotal');
+    const $heroFeriados = $('heroFeriados');
+
+    function dk(y,m,d){ return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+    function parseKey(k){ const [y,m,d]=k.split('-').map(Number); return {year:y,month:m-1,day:d}; }
+    function getColor(type){ return COLOR_MAP[type]||'#78716c'; }
+    function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+    function todayKey(){ const t=new Date(); return dk(t.getFullYear(),t.getMonth(),t.getDate()); }
+
+    function dateRange(y1,m1,d1,y2,m2,d2){
+        const dates=[], s=new Date(y1,m1,d1), e=new Date(y2,m2,d2);
+        for(let c=new Date(s);c<=e;c.setDate(c.getDate()+1))
+            dates.push(dk(c.getFullYear(),c.getMonth(),c.getDate()));
+        return dates;
+    }
+    function singleDate(y,m,d){ return [dk(y,m,d)]; }
+
+    function showToast(msg){
+        $toast.textContent=msg;
+        $toast.classList.add('show');
+        setTimeout(()=>$toast.classList.remove('show'),2400);
+    }
+
+    function loadEvents(){
+        try{ const r=localStorage.getItem(STORAGE_KEY); events=r?JSON.parse(r):{}; }
+        catch(e){ events={}; }
+    }
+    function saveEvents(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(events)); }
+
+    function addBulkEvent(dates,type,desc){
+        dates.forEach(d=>{
+            if(!events[d]) events[d]=[];
+            if(!events[d].some(e=>e.type===type&&(e.description||'')==(desc||'')))
+                events[d].push({id:uid(),type,description:desc||''});
+        });
+    }
+
+    function seedDefaultEvents(){
+        // FÉRIAS DOCENTES
+        addBulkEvent(dateRange(2026,0,2,2026,0,17),'Férias docentes','');
+        addBulkEvent(dateRange(2026,6,6,2026,6,21),'Férias docentes','');
+
+        // RECESSO ESCOLAR
+        addBulkEvent(dateRange(2026,0,18,2026,0,31),'Recesso escolar','');
+        addBulkEvent(dateRange(2026,11,21,2026,11,23),'Recesso escolar','');
+        addBulkEvent(dateRange(2026,11,28,2026,11,31),'Recesso escolar','');
+
+        // PLANEJAMENTO
+        addBulkEvent(dateRange(2026,1,18,2026,1,20),'Planejamento','');
+        addBulkEvent(singleDate(2026,6,22),'Planejamento','');
+        addBulkEvent(singleDate(2026,6,23),'Planejamento','');
+
+        // INÍCIO DOS BIMESTRES
+        addBulkEvent(singleDate(2026,1,2),'Início do bimestre','1º Bimestre');
+        addBulkEvent(singleDate(2026,3,23),'Início do bimestre','2º Bimestre');
+        addBulkEvent(singleDate(2026,6,24),'Início do bimestre','3º Bimestre');
+        addBulkEvent(singleDate(2026,9,5),'Início do bimestre','4º Bimestre');
+
+        // ATIVIDADES DIAGNÓSTICAS
+        addBulkEvent(dateRange(2026,1,2,2026,1,13),'Atividades diagnósticas','');
+        addBulkEvent(dateRange(2026,7,10,2026,7,14),'Atividades diagnósticas','');
+
+        // MAPA CLASSE - SONDAGEM
+        addBulkEvent(dateRange(2026,3,7,2026,3,10),'Mapa Classe - Sondagem','');
+        addBulkEvent(dateRange(2026,8,8,2026,8,11),'Mapa Classe - Sondagem','');
+
+        // FLUÊNCIA LEITORA - ENTRADA
+        addBulkEvent(dateRange(2026,2,9,2026,2,27),'Avaliação de fluência leitora - Entrada','2º ano EF');
+
+        // FLUÊNCIA LEITORA - SAÍDA
+        addBulkEvent(dateRange(2026,10,23,2026,10,27),'Avaliação de fluência leitora - Saída','2º ano EF');
+
+        // PROVA PAULISTA
+        addBulkEvent(dateRange(2026,3,13,2026,3,17),'Prova Paulista','');
+        addBulkEvent(dateRange(2026,5,15,2026,5,19),'Prova Paulista','');
+        addBulkEvent(dateRange(2026,8,21,2026,8,25),'Prova Paulista','');
+
+        // SARESP
+        addBulkEvent(dateRange(2026,5,23,2026,5,26),'SARESP','3ª série EM');
+        addBulkEvent(dateRange(2026,10,3,2026,10,6),'SARESP','');
+        addBulkEvent(dateRange(2026,10,9,2026,10,13),'SARESP','');
+        addBulkEvent(dateRange(2026,10,16,2026,10,19),'SARESP','');
+        addBulkEvent(singleDate(2026,10,30),'SARESP','');
+        addBulkEvent(dateRange(2026,11,1,2026,11,4),'SARESP','');
+
+        // PERÍODO DE RECUPERAÇÃO E APROFUNDAMENTO
+        addBulkEvent(dateRange(2026,3,23,2026,3,30),'Período de recuperação e aprofundamento','');
+        addBulkEvent(dateRange(2026,6,24,2026,6,31),'Período de recuperação e aprofundamento','');
+        addBulkEvent(dateRange(2026,11,1,2026,11,4),'Período de recuperação e aprofundamento','');
+
+        // PROVA DE RECUPERAÇÃO
+        addBulkEvent(dateRange(2026,7,3,2026,7,7),'Prova de recuperação','');
+        addBulkEvent(dateRange(2026,11,7,2026,11,9),'Prova de recuperação','');
+
+        // OMASP
+        addBulkEvent(dateRange(2026,4,18,2026,4,22),'OMASP','2ª fase');
+
+        // OLISP
+        addBulkEvent(dateRange(2026,7,24,2026,7,28),'OLISP','');
+
+        // FERIADOS / EMENDAS
+        addBulkEvent(singleDate(2026,0,1),'Feriado / Emenda','Confraternização Universal');
+        addBulkEvent(singleDate(2026,1,16),'Feriado / Emenda','Carnaval');
+        addBulkEvent(singleDate(2026,1,17),'Feriado / Emenda','Carnaval');
+        addBulkEvent(singleDate(2026,3,3),'Feriado / Emenda','Sexta-Feira Santa');
+        addBulkEvent(singleDate(2026,3,20),'Feriado / Emenda','Emenda');
+        addBulkEvent(singleDate(2026,3,21),'Feriado / Emenda','Tiradentes');
+        addBulkEvent(singleDate(2026,4,1),'Feriado / Emenda','Dia do Trabalho');
+        addBulkEvent(singleDate(2026,4,2),'Feriado / Emenda','Emenda');
+        addBulkEvent(singleDate(2026,5,4),'Feriado / Emenda','Corpus Christi');
+        addBulkEvent(singleDate(2026,5,5),'Feriado / Emenda','Emenda');
+        addBulkEvent(singleDate(2026,6,9),'Feriado / Emenda','Revolução Constitucionalista');
+        addBulkEvent(singleDate(2026,8,7),'Feriado / Emenda','Independência do Brasil');
+        addBulkEvent(singleDate(2026,9,12),'Feriado / Emenda','Nossa Senhora Aparecida');
+        addBulkEvent(singleDate(2026,9,15),'Feriado / Emenda','Dia do Professor');
+        addBulkEvent(singleDate(2026,9,28),'Feriado / Emenda','Dia do Servidor Público');
+        addBulkEvent(singleDate(2026,10,2),'Feriado / Emenda','Finados');
+        addBulkEvent(singleDate(2026,10,15),'Feriado / Emenda','Proclamação da República');
+        addBulkEvent(singleDate(2026,10,20),'Feriado / Emenda','Consciência Negra');
+        addBulkEvent(singleDate(2026,11,24),'Feriado / Emenda','Emenda');
+        addBulkEvent(singleDate(2026,11,25),'Feriado / Emenda','Natal');
+
+        saveEvents();
+        localStorage.setItem(SEED_KEY,'1');
+    }
+
+    function renderWeekdays(){
+        $weekdaysRow.innerHTML = WEEKDAY_LABELS.map(l=>`<div class="weekday-label">${l}</div>`).join('');
+    }
+
+    function renderLegend(){
+        const groups={};
+        CATEGORIES.forEach(c=>{ if(!groups[c.group])groups[c.group]=[]; groups[c.group].push(c); });
+        let html='';
+        for(const [g,items] of Object.entries(groups)){
+            html+=`<div class="legend-group">
+                <div class="legend-group-title">${g}</div>
+                <div class="legend-grid">${items.map(c=>`<div class="legend-item"><div class="legend-swatch" style="background:${c.color}"></div>${c.key}</div>`).join('')}</div>
+            </div>`;
+        }
+        $legendContent.innerHTML=html;
+    }
+
+    function renderFilters(){
+        let html='<div class="filter-chip active" data-filter="all">Todos</div>';
+        CATEGORIES.forEach(c=>{
+            html+=`<div class="filter-chip" data-filter="${c.key}"><span class="fdot" style="background:${c.raw}"></span>${c.key}</div>`;
+        });
+        $filterBar.innerHTML=html;
+        $filterBar.querySelectorAll('.filter-chip').forEach(chip=>{
+            chip.addEventListener('click',()=>{
+                const f=chip.dataset.filter;
+                if(f==='all'){
+                    activeFilters.clear();
+                    $filterBar.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+                    chip.classList.add('active');
+                } else {
+                    $filterBar.querySelector('[data-filter="all"]').classList.remove('active');
+                    chip.classList.toggle('active');
+                    if(chip.classList.contains('active')) activeFilters.add(f);
+                    else activeFilters.delete(f);
+                    if(activeFilters.size===0) $filterBar.querySelector('[data-filter="all"]').classList.add('active');
+                }
+                renderCalendar();
+            });
+        });
+    }
+
+    function getVisibleEvents(dateK){
+        const dayEv=events[dateK];
+        if(!dayEv) return [];
+        if(activeFilters.size===0) return dayEv;
+        return dayEv.filter(e=>activeFilters.has(e.type));
+    }
+
+    function updateHero(){
+        $heroMonth.textContent=`${MONTH_NAMES[currentMonth]} ${currentYear}`;
+        let total=0, feriados=0;
+        for(const [dateK,arr] of Object.entries(events)){
+            const {year,month}=parseKey(dateK);
+            if(year===currentYear&&month===currentMonth){
+                const filtered=activeFilters.size===0?arr:arr.filter(e=>activeFilters.has(e.type));
+                total+=filtered.length;
+                feriados+=filtered.filter(e=>e.type==='Feriado / Emenda').length;
+            }
+        }
+        $heroTotal.textContent=total;
+        $heroFeriados.textContent=feriados;
+        $heroSub.textContent=total>0?`${total} ação${total>1?'ões':''} programada${total>1?'s':''} neste mês`:'Nenhuma ação programada neste mês';
+    }
+
+    function renderCalendar(){
+        $monthTitle.textContent=`${MONTH_NAMES[currentMonth]} ${currentYear}`;
+        const firstDay=new Date(currentYear,currentMonth,1).getDay();
+        const daysInMonth=new Date(currentYear,currentMonth+1,0).getDate();
+        const tk=todayKey();
+
+        let html='';
+        for(let i=0;i<firstDay;i++) html+='<div class="day-cell empty"></div>';
+
+        for(let d=1;d<=daysInMonth;d++){
+            const dateK=dk(currentYear,currentMonth,d);
+            const visible=getVisibleEvents(dateK);
+            const isSelected=dateK===selectedDateKey;
+            const isToday=dateK===tk;
+
+            let cls='day-cell has-day';
+            if(isSelected) cls+=' selected';
+            if(isToday) cls+=' today';
+
+            let dots='';
+            if(visible.length>0){
+                dots='<div class="event-dots">'+
+                    visible.slice(0,6).map(e=>`<div class="event-dot" style="background:${getColor(e.type)}"></div>`).join('')+
+                    (visible.length>6?'<div class="event-dot" style="background:#555"></div>':'')+
+                    '</div>';
+            }
+
+            html+=`<div class="${cls}" data-date="${dateK}"><div class="day-number">${d}</div>${dots}</div>`;
+        }
+        $daysGrid.innerHTML=html;
+        $daysGrid.querySelectorAll('.day-cell.has-day').forEach(cell=>{
+            cell.addEventListener('click',()=>selectDay(cell.dataset.date));
+        });
+        renderStats();
+        updateHero();
+    }
+
+    function renderStats(){
+        const monthEv={};
+        let total=0;
+        for(const [dateK,arr] of Object.entries(events)){
+            const {year,month}=parseKey(dateK);
+            if(year===currentYear&&month===currentMonth){
+                const filtered=activeFilters.size===0?arr:arr.filter(e=>activeFilters.has(e.type));
+                filtered.forEach(e=>{ monthEv[e.type]=(monthEv[e.type]||0)+1; total++; });
+            }
+        }
+        if(total===0){ $statsRow.innerHTML=''; return; }
+        let html=`<div class="stat-chip"><strong>${total}</strong> ação${total>1?'ões':''} este mês</div>`;
+        for(const [type,cnt] of Object.entries(monthEv)){
+            const short=type.length>24?type.slice(0,24)+'…':type;
+            html+=`<div class="stat-chip"><span style="display:inline-block;width:7px;height:7px;border-radius:2px;background:${getColor(type)};margin-right:4px;vertical-align:middle;"></span>${cnt}× ${short}</div>`;
+        }
+        $statsRow.innerHTML=html;
+    }
+
+    function selectDay(dateK){
+        selectedDateKey=dateK;
+        renderCalendar();
+        renderPanel();
+    }
+
+    function renderPanel(){
+        if(!selectedDateKey){
+            $panelDate.textContent='Selecione um dia';
+            $eventList.innerHTML='<div class="empty-state">Clique em um dia no calendário<small>para ver e gerenciar ações</small></div>';
+            return;
+        }
+        const {year,month,day}=parseKey(selectedDateKey);
+        const dateObj=new Date(year,month,day);
+        $panelDate.textContent=dateObj.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+        const dayEv=events[selectedDateKey];
+        if(!dayEv||dayEv.length===0){
+            $eventList.innerHTML='<div class="empty-state">Nenhuma ação neste dia<small>Use o formulário abaixo para adicionar</small></div>';
+            return;
+        }
+
+        $eventList.innerHTML=dayEv.map(ev=>{
+            const c=getColor(ev.type);
+            return `<div class="event-card fade-in" style="border-left-color:${c}">
+                <div class="event-card-content">
+                    <div class="event-card-type">${ev.type}</div>
+                    ${ev.description?`<div class="event-card-desc">${ev.description}</div>`:''}
+                </div>
+                <button class="btn btn-danger btn-sm" data-eid="${ev.id}" title="Remover">✕</button>
+            </div>`;
+        }).join('');
+
+        $eventList.querySelectorAll('.btn-danger').forEach(btn=>{
+            btn.addEventListener('click',e=>{
+                e.stopPropagation();
+                removeEvent(selectedDateKey,btn.dataset.eid);
+            });
+        });
+    }
+
+    function addEvent(){
+        const dateVal=$addDate.value;
+        if(!dateVal){ showToast('Selecione uma data'); return; }
+        const type=$addType.value;
+        if(!type){ showToast('Selecione uma categoria'); return; }
+        const desc=$addDesc.value.trim();
+        let finalType=type, finalDesc=desc;
+        if(type==='Outro'){
+            if(!desc){ showToast('Para "Outro", descreva na descrição'); return; }
+            finalType=desc; finalDesc='';
+        }
+        if(!events[dateVal]) events[dateVal]=[];
+        events[dateVal].push({id:uid(),type:finalType,description:finalDesc});
+        saveEvents();
+        renderCalendar();
+        selectedDateKey=dateVal;
+        renderPanel();
+        $addType.value=''; $addDesc.value=''; $addDate.value=dateVal;
+        showToast('Ação adicionada com sucesso');
+    }
+
+    function removeEvent(dateK,eid){
+        if(!events[dateK]) return;
+        events[dateK]=events[dateK].filter(e=>e.id!==eid);
+        if(events[dateK].length===0) delete events[dateK];
+        saveEvents();
+        renderCalendar();
+        renderPanel();
+        showToast('Ação removida');
+    }
+
+    function exportData(){
+        const json=JSON.stringify(events,null,2);
+        const blob=new Blob([json],{type:'application/json'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');
+        a.href=url; a.download='calendario-pedagogico-2026.json'; a.click();
+        URL.revokeObjectURL(url);
+        showToast('Dados exportados');
+    }
+
+    function openImport(){ $importText.value=''; $importModal.classList.add('active'); }
+    function closeImport(){ $importModal.classList.remove('active'); }
+    function confirmImport(){
+        try{
+            const data=JSON.parse($importText.value);
+            if(typeof data!=='object'||Array.isArray(data)) throw new Error();
+            events=data; saveEvents(); renderCalendar(); renderPanel();
+            closeImport(); showToast('Dados importados');
+        } catch(e){ showToast('JSON inválido'); }
+    }
+
+    function populateTypeSelect(){
+        let html='<option value="">— Selecione —</option>';
+        CATEGORIES.forEach(c=>{ html+=`<option value="${c.key}">${c.key}</option>`; });
+        $addType.innerHTML=html;
+    }
+
+    function init(){
+        loadEvents();
+        if(!localStorage.getItem(SEED_KEY)) seedDefaultEvents();
+
+        renderWeekdays();
+        renderLegend();
+        renderFilters();
+        populateTypeSelect();
+
+        const t=new Date();
+        $addDate.value=dk(t.getFullYear(),t.getMonth(),t.getDate());
+
+        const tk=todayKey();
+        const pk=parseKey(tk);
+        if(pk.year===2026){
+            currentMonth=pk.month;
+            renderCalendar();
+            selectDay(tk);
+        } else {
+            currentMonth=0;
+            renderCalendar();
+            selectDay(dk(2026,0,2));
+        }
+
+        $('prevMonth').addEventListener('click',()=>{
+            currentMonth--;
+            if(currentMonth<0){currentMonth=11;currentYear--;}
+            selectedDateKey=null;
+            renderCalendar(); renderPanel();
+        });
+        $('nextMonth').addEventListener('click',()=>{
+            currentMonth++;
+            if(currentMonth>11){currentMonth=0;currentYear++;}
+            selectedDateKey=null;
+            renderCalendar(); renderPanel();
+        });
+        $addBtn.addEventListener('click',addEvent);
+        $('btnExport').addEventListener('click',exportData);
+        $('btnImport').addEventListener('click',openImport);
+        $('importCancel').addEventListener('click',closeImport);
+        $('importConfirm').addEventListener('click',confirmImport);
+        $('btnPrint').addEventListener('click',()=>window.print());
+        $('btnReset').addEventListener('click',()=>{
+            if(confirm('Restaurar calendário oficial? Todos os dados atuais serão substituídos.')){
+                events={}; localStorage.removeItem(SEED_KEY);
+                seedDefaultEvents(); renderCalendar(); renderPanel();
+                showToast('Calendário restaurado');
+            }
+        });
+        $importModal.addEventListener('click',e=>{ if(e.target===$importModal) closeImport(); });
+        document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeImport(); });
+    }
+
+    init();
+})();
+</script>
+</body>
+</html>
